@@ -1,0 +1,205 @@
+---
+title: "Assignment 1 - Network Analysis"
+author: "Balint Bojko"
+date: '2018 november 2 '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+<style>
+body {
+text-align: justify}
+</style>
+
+##Question 1
+
+###a,
+The following code gives NA, because NA values in included in the computation process.
+
+```{r}
+a <- c(8, NA, 20, 5, 7, 9)
+mean(a)
+```
+
+We need to drop the NA, by including na.rm in the mean function.
+
+```{r}
+mean(a,na.rm = T)
+```
+
+###b,
+Now, remove the NA from the vector instead and compute the mean.
+```{r}
+a <- a[-2]
+mean(a)
+```
+
+##Question 2
+###a,
+```{r}
+matrix_Q2 <- matrix(c(0,1,1,1,rep(0,12)),4,4,byrow = T)
+```
+
+###b,
+```{r}
+library(qgraph)
+qgraph(matrix_Q2)
+```
+
+##Question 3
+###a,
+```{r}
+library(psych)
+# Load bfi dataset:
+data(bfi)
+# Look at data:
+View(bfi)
+```
+More information about the data set can be found by running '?bfi' from the console.
+
+###b,
+Number of men
+```{r}
+sum(bfi$gender==1)
+```
+Number of women
+```{r}
+sum(bfi$gender==2)
+```
+
+###c,
+Mean age of subjects
+```{r}
+mean(bfi$age)
+```
+
+###d,
+Found information about EFA function in the psych package description ('?psych') / ('?psych::fa')
+
+Creating new dataset
+```{r}
+data_Q3 <- bfi[,1:25]
+fa_Q3 <- fa(data_Q3, rotate = 'promax')
+```
+###e,
+Creating plot with loadings
+```{r}
+qgraph.loadings(unclass(fa_Q3$loadings))
+```
+
+
+##Question 4
+###a,
+Setting the working directory from the menu: Session/Set Working Directory/To Source File Location
+
+###b,
+Loading SPSS file
+```{r}
+library(foreign)
+data_Q4 <- read.spss('job_performance.sav',to.data.frame = T)
+```
+
+###c,
+```{r}
+cor(data_Q4[,-1])
+```
+
+###d,
+Fitting linear regression with job performance as the outcome variable, and IQ, motivation and social support as predictors.
+```{r}
+fit <- lm(perf ~ iq + mot + soc, data = data_Q4)
+```
+
+###e,
+Investigating object fit
+```{r}
+summary(fit)
+```
+
+All three predictors are significant with and without adjusting for multiple testing (Bonferroni). Quick question: do you need to adjust for multiple testing in this case?
+
+
+##Question 5
+###a,
+```{r}
+data_Q5 <- read.spss('PTSDdata.sav',to.data.frame = T)
+data_Q5 <- data_Q5[,10:30]
+colnames(data_Q5) <- c('Lifetime Trauma',
+                       'Intrusive thoughts',
+                       'Nightmares',
+                       'Flashbacks',
+                       'Emotional cue reactivity',
+                       'Psychological cue reactivity',
+                       'Avoidance of thoughts',
+                       'Avoidance of reminders',
+                       'Trauma-related amnesia',
+                       'Negative beliefs',
+                       'Blame of self or others',
+                       'Negative trauma-related emotions',
+                       'Loss of interest',
+                       'Detachment',
+                       'Restricted affect',
+                       'Irritability / anger',
+                       'Self-destructive / reckless behaviour',
+                       'Hypervigilance',
+                       'Exaggerated startle response',
+                       'Difficulty concentrating',
+                       'Sleep disturbance')
+head(data_Q5)
+```
+###c,
+```{r}
+round(cor(data_Q5[,-1]),2)
+```
+
+
+###d,
+```{r}
+sum(data_Q5$Nightmares)
+sum(data_Q5$`Sleep disturbance`)
+```
+
+###e,
+```{r}
+cor.test(data_Q5$`Lifetime Trauma`,data_Q5$Nightmares)
+```
+The correlation is significant, however, can be considered 'weak' only. Cor = 0.19, p = 0.005
+
+###f,
+```{r}
+library(ppcor)
+pcor.test(data_Q5$`Lifetime Trauma`,data_Q5$Nightmares,data_Q5$`Negative trauma-related emotions`)
+```
+The p-value is still significant at alpha = 0.05, however, it is higher with the control variable included. Cor = 0.164, p = 0.015. This happened because some of the shared variance between the two variables can be explained by the control variable.
+
+##Bonus question
+```{r, message=F, error=F,warning=F}
+data_bonus <- read.csv('studentdata.csv',sep=';')
+
+par(mfrow = c(1,1), mar = c(5,5,10,5))
+
+barplot(prop.table(table(data_bonus$What.is.your.gender.)),  col=rgb(0,0,1,1/4),
+        main = 'Gender')
+
+barplot(prop.table(table(data_bonus$I.am.a.student.in.the.)),  col=rgb(0,0,1,1/4),
+        main = 'Study programme')
+
+barplot(prop.table(table(data_bonus$How.familiar.are.you.with.R.)),  col=rgb(0,0,1,1/4),
+        main = 'Familiarity with R')
+
+barplot(prop.table(table(data_bonus$What.is..are..your.specialization.s..)),  col=rgb(0,0,1,1/4),
+        main = 'Specialization')
+
+barplot(prop.table(table(data_bonus$Where.are.you.from.)),  col=rgb(0,0,1,1/4),
+        main = 'Home country')
+
+```
+
+
+
+
+
