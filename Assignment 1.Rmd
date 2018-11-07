@@ -2,29 +2,12 @@
 title: "Assignment 1 - Network Analysis"
 author: "Balint Bojko"
 date: '2018 november 2 '
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-Please note:
-
-I couldn't knit the file into a pdf for some reason. I got this error:
-
-Output created: Assignment_1.pdf 
-Error in tools::file_path_as_absolute(output_file) : 
-  file 'Assignment_1.pdf' does not exist 
-Calls: <Anonymous> -> <Anonymous> 
-In addition: Warning messages: 
-1: running command '"pdflatex" -halt-on-error -interaction=batchmode "Assignment_1.tex"' had status 1
-In readLines(log) : incomplete final line found on 'Assignment_1.log' 
-3: In readLines(logfile) :
-  incomplete final line found on 'Assignment_1.log'
-Execution halted
-
-Do you know why this could be?
 
 ##Question 1
 
@@ -217,8 +200,6 @@ barplot(prop.table(table(data_bonus$Where.are.you.from.)),  col=rgb(0,0,1,1/4),
         main = 'Home country', las = 2)
 
 ```
-
-
 
 
 
